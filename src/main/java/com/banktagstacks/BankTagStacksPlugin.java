@@ -449,8 +449,10 @@ public class BankTagStacksPlugin extends Plugin
 		{
 			if (client.getVarbitValue(VarbitID.BANK_CURRENTTAB) == BANKTAB_POTIONSTORE)
 			{
-				// Same fix Bank Tags uses: close the potion store first or deposits stop working
-				client.menuAction(-1, InterfaceID.Bankmain.POTIONSTORE_BUTTON, MenuAction.CC_OP, 1, -1, "Potion store", "");
+				// Opening a tag over the potion store leaves it open underneath and deposits stop working.
+				// Plugins can't close it for the player, so ask them to.
+				chat("Close the potion store before opening a stacked tag.");
+				return;
 			}
 			client.setVarbit(VarbitID.BANK_CURRENTTAB, 0);
 			service.openBankTag(tag, BankTagsService.OPTION_ALLOW_MODIFICATIONS);

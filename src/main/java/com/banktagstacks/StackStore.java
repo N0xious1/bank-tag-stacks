@@ -3,7 +3,6 @@ package com.banktagstacks;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -24,10 +23,6 @@ import net.runelite.client.config.ConfigManager;
 @Singleton
 class StackStore
 {
-	private static final Type TYPE = new TypeToken<LinkedHashMap<String, List<String>>>()
-	{
-	}.getType();
-
 	private final ConfigManager configManager;
 	private final Gson gson;
 	private final Map<String, List<String>> stacks = new LinkedHashMap<>();
@@ -50,7 +45,9 @@ class StackStore
 
 		try
 		{
-			Map<String, List<String>> loaded = gson.fromJson(json, TYPE);
+			Map<String, List<String>> loaded = gson.fromJson(json, new TypeToken<LinkedHashMap<String, List<String>>>()
+			{
+			}.getType());
 			if (loaded != null)
 			{
 				loaded.forEach((stack, members) -> stacks.put(stack, members == null ? new ArrayList<>() : new ArrayList<>(members)));
